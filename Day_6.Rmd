@@ -1,0 +1,101 @@
+---
+title: ' R with Ammar (Day_6)'
+author: "Ammar"
+date: "2023-04-03"
+output:
+  html_document: default
+  pdf_document: default
+---
+## Importing dataset
+```{r}
+df <- mtcars
+head(df)
+```
+
+# Making a heatmap
+
+
+```{r}
+df <- as.matrix(df)
+heatmap(df)
+```
+
+
+```{r}
+heatmap(df, scale = "column")
+```
+
+
+```{r}
+heatmap(df, scale = "column", col = cm.colors(256))
+```
+```{r}
+heatmap(df, scale = "column", col = terrain.colors(256))
+```
+```{r}
+library(RColorBrewer)
+coul <- colorRampPalette(brewer.pal(8, "PiYG"))(25)
+heatmap(df, scale = "column", col = coul)
+```
+
+
+```{r}
+display.brewer.all()
+```
+
+
+```{r}
+volcano
+```
+
+```{r}
+library(tidyverse)
+
+volcano %>%
+  
+  # Data Wrangling
+  as_tibble() %>%
+  rowid_to_column(var = "X") %>%
+  gather(key = "Y", value = Z, -1) %>%
+  
+  # change Y to numeric
+  mutate(Y = as.numeric(gsub("V","", Y)))
+```
+
+```{r}
+# Using plotly for plots
+# Library
+library(ggplot2)
+library(hrbrthemes)
+
+## Dummy data
+x <- LETTERS[1:20]
+y <- paste0("var", seq(1,20))
+data <- expand.grid(X =x, Y=y)
+data$Z <- runif(400,0,5)
+
+data
+```
+
+```{r}
+
+library(plotly)
+# classic ggplot, with text in aes
+p <- ggplot(data, aes(X,Y, fill = Z))+geom_tile() 
+p
+
+pp <- ggplotly(p,tooltip = "text" )
+pp
+```
+  
+  
+  
+```{r}
+library(plotly)
+ggplotly(p)
+```
+
+```{r}
+library(htmlwidgets)
+saveWidget(pp, file="./Heatmap.html")
+```
